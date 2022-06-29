@@ -1,4 +1,4 @@
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const express = require('express');
 const port = process.env.PORT || 5000;
 const cors = require('cors');
@@ -19,10 +19,41 @@ async function run() {
         await client.connect();
         const dataCollection = client.db("pabnaBikeCorner").collection("bikeData");
 
-        app.get('/bikeData', async(req, res)=>{
+        app.get('/bikeData', async (req, res) => {
             const query = {};
             const cursor = dataCollection.find(query);
             const result = await cursor.toArray();
+            res.send(result);
+        })
+
+        app.get('/bikeData/:id', async (req, res) => {
+            let id = req.params.id;
+            // console.log(id)
+            const query = { _id: ObjectId(id) };
+            const singleData = await dataCollection.findOne(query);
+            res.send(singleData);
+        })
+        // Update data 
+        app.put('/bikeData/:id', async (req, res) => {
+            // const idd = parseInt(id)
+            const id = req.params.id;
+            // console.log(id)
+            const updateData = req.body;
+            const filter = { _id: ObjectId(id) };
+            console.log(filter)
+            const options = { upsert: true };
+            //name, image, description, price, quentity, suppliername
+            const updatedValue = {
+                $set: { 
+                    name : updateData.name,
+                    image : updateData.image,
+                    description : updateData.description,
+                    price : updateData.price,
+                    quentity : updateData.quentity,
+                    suppliername : updateData.suppliername
+                 }
+            };
+            const result = await dataCollection.updateOne(filter, updatedValue, options)
             res.send(result);
         })
     }
