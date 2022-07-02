@@ -33,6 +33,13 @@ async function run() {
             const singleData = await dataCollection.findOne(query);
             res.send(singleData);
         })
+
+        //POST API
+        app.post("/bikeData", async(req, res)=>{
+            const postData = req.body;
+            const result = await dataCollection.insertOne(postData);
+            res.send(result);
+        })
         // Update data 
         app.put('/bikeData/:id', async (req, res) => {
             // const idd = parseInt(id)
