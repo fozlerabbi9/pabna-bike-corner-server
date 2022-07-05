@@ -18,8 +18,11 @@ async function run() {
     try {
         await client.connect();
         const dataCollection = client.db("pabnaBikeCorner").collection("bikeData");
-
+        
+        let email;
         app.get('/bikeData', async (req, res) => {
+            email = req?.query?.email;
+            console.log(email);
             const query = {};
             const cursor = dataCollection.find(query);
             const result = await cursor.toArray();
@@ -34,8 +37,31 @@ async function run() {
             res.send(singleData);
         })
 
+        //My-Items
+        // app.get('/bikeData', async (req, res) => {
+            // const email = req.query.email;
+            // console.log(email);
+            // const query = {};
+            // const cursor = dataCollection.find(query);
+            // const resultItem = await cursor.toArray();
+            // res.send(resultItem);
+            
+            // const query = {};
+            // const cursor = dataCollection.find(query);
+            // const res = await cursor.toArray
+        // })
+         //My-Items
+        app.get('/bikeData', async (req, res) => {
+            // const email = req.query?.email;
+            // console.log(email);
+            const query = {};
+            const cursor = dataCollection.find(query);
+            const result = await cursor.toArray();
+            res.send(result);
+        })
+
         //POST API
-        app.post("/bikeData", async(req, res)=>{
+        app.post("/bikeData", async (req, res) => {
             const postData = req.body;
             const result = await dataCollection.insertOne(postData);
             res.send(result);
@@ -51,14 +77,14 @@ async function run() {
             const options = { upsert: true };
             //name, image, description, price, quentity, suppliername
             const updatedValue = {
-                $set: { 
-                    name : updateData.name,
-                    image : updateData.image,
-                    description : updateData.description,
-                    price : updateData.price,
-                    quentity : updateData.quentity,
-                    suppliername : updateData.suppliername
-                 }
+                $set: {
+                    name: updateData.name,
+                    image: updateData.image,
+                    description: updateData.description,
+                    price: updateData.price,
+                    quentity: updateData.quentity,
+                    suppliername: updateData.suppliername
+                }
             };
             const result = await dataCollection.updateOne(filter, updatedValue, options)
             res.send(result);
