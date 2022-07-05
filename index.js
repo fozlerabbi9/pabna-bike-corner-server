@@ -45,10 +45,6 @@ async function run() {
             // const cursor = dataCollection.find(query);
             // const resultItem = await cursor.toArray();
             // res.send(resultItem);
-            
-            // const query = {};
-            // const cursor = dataCollection.find(query);
-            // const res = await cursor.toArray
         // })
          //My-Items
         app.get('/bikeData', async (req, res) => {
