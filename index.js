@@ -94,7 +94,7 @@ run().catch(console.dir);
 
 
 app.get('/', (req, res) => {
-    res.send('Hello rabbi,,,,,!!!!!!!')
+    res.send('Hello Rabbi,,,,,!!!!!!!')
 })
 
 app.listen(port, () => {
